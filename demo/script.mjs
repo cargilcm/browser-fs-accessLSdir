@@ -138,9 +138,10 @@ import { imageToBlob } from './image-to-blob.mjs';
         recursive: true,
       });
       listDirectory(blobs);
-      alert(blobs);
+      
     } catch (err) {
       if (err.name !== 'AbortError') {
+alert(err);
         return console.error(err);
       }
       console.log(ABORT_MESSAGE);

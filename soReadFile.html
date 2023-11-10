@@ -1,5 +1,14 @@
-// this file comes from code at https://stackoverflow.com/questions/3146483/html5-file-api-read-as-text-and-binary
-
+<!-- this file comes from code at https://stackoverflow.com/questions/3146483/html5-file-api-read-as-text-and-binary-->
+<head>
+<style>
+body {
+    font-family: sans-serif;
+}
+#contents {
+    font-family: monospace;
+    white-space: pre;
+}
+</style>
 <script>
 const $ = id => document.getElementById(id);
 
@@ -57,17 +66,8 @@ btnRead.addEventListener("click", () => {
         console.error(`Error reading file:`, error);
     });
 });
-
 </script>
-<style>
-body {
-    font-family: sans-serif;
-}
-#contents {
-    font-family: monospace;
-    white-space: pre;
-}
-</style>
+</head>
 <body>
 <form>
     <div>

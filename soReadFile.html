@@ -58,6 +58,7 @@ fileInput.addEventListener("input", updateButton);
 btnRead.addEventListener("click", () => {
     const file = fileInput.files[0];
     if (!file) {
+        alert("no file added");
         return;
     }
     const readFile = rdoText.checked ? readTextFile : readBinaryFile;

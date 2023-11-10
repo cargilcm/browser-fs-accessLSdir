@@ -1,1 +1,93 @@
-this file comes from code at https://stackoverflow.com/questions/3146483/html5-file-api-read-as-text-and-binary
+// this file comes from code at https://stackoverflow.com/questions/3146483/html5-file-api-read-as-text-and-binary
+
+<script>
+const $ = id => document.getElementById(id);
+
+const fileInput = $("fileInput");
+const btnRead = $("btnRead");
+const rdoText = $("rdoText");
+const contentsDiv = $("contents");
+
+const updateButton = () => {
+    btnRead.disabled = fileInput.files.length === 0;
+};
+
+const readTextFile = async (file) => {
+    const text = await file.text();
+    contentsDiv.textContent = text;
+    contentsDiv.classList.add("text");
+    contentsDiv.classList.remove("binary");
+    console.log("Done reading text file");
+};
+
+const readBinaryFile = async (file) => {
+    // Read into an array buffer, create
+    const buffer = await file.arrayBuffer();
+    // Get a byte array for that buffer
+    const bytes = new Uint8Array(buffer);
+    // Show it as hex text
+    const lines = [];
+    let line = [];
+    bytes.forEach((byte, index) => {
+        const hex = byte.toString(16).padStart(2, "0");
+        line.push(hex);
+        if (index % 16 === 15) {
+            lines.push(line.join(" "));
+            line = [];
+        }
+    });
+    contentsDiv.textContent = lines.join("\n");
+    contentsDiv.classList.add("binary");
+    contentsDiv.classList.remove("text");
+    console.log(`Done reading binary file (length: ${bytes.length})`);
+};
+
+updateButton();
+
+fileInput.addEventListener("input", updateButton);
+
+btnRead.addEventListener("click", () => {
+    const file = fileInput.files[0];
+    if (!file) {
+        return;
+    }
+    const readFile = rdoText.checked ? readTextFile : readBinaryFile;
+    readFile(fileInput.files[0])
+    .catch(error => {
+        console.error(`Error reading file:`, error);
+    });
+});
+
+</script>
+<style>
+body {
+    font-family: sans-serif;
+}
+#contents {
+    font-family: monospace;
+    white-space: pre;
+}
+</style>
+<body>
+<form>
+    <div>
+        <label>
+            <span>File:</span>
+            <input type="file" id="fileInput">
+        </label>
+    </div>
+   <div>
+        <label>
+            <input id="rdoText" type="radio" name="format" value="text" checked>
+            Text
+        </label>
+        <label>
+            <input id="rdoBinary" type="radio" name="format" value="binary">
+            Binary
+        </label>
+    </div>
+    <div>
+        <input id="btnRead" type="button" value="Read File">
+    </div>
+</form>
+<div id="contents"></div>
